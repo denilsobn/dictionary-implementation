@@ -1,0 +1,32 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+if [[ $# -ne 2 ]]; then
+  echo "erro. Uso: $0 <avl|hash|rbt|openhash> <arquivo_texto>" >&2
+  exit 1
+fi
+
+dic="$1"
+txt="$2"
+# aonde tao os executaveis
+BIN_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+case "$dic" in
+  avl) bin="$BIN_DIR/../bin/freq_avl"   ;;
+  hash) bin="$BIN_DIR/../bin/freq_hash" ;;
+  rbt) bin="$BIN_DIR/../bin/freq_rbt"   ;;
+  openhash) bin="$BIN_DIR/../bin/freq_openhash"   ;;
+  *)
+    echo "Implementação desconhecida: $dic" >&2
+    echo "Use: avl, hash, rbt ou openhash" >&2
+    exit 1
+    ;;
+esac
+
+if [[ ! -x "$bin" ]]; then
+  echo "Erro: binário '$bin' não encontrado ou não é executável" >&2
+  exit 1
+fi
+
+# bin arquivo exec e txt o livro
+exec "$bin" "$txt"
